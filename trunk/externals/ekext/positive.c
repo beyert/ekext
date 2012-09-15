@@ -1,5 +1,6 @@
-/* cup counts up ^_^
- * Copyright (c) 2012, Dr Edward Kelly <morph_2016@yahoo.co.uk>
+/*
+ * positive - wraps floats back into positive numbers from negative
+ * Copyright (c) 2005, Dr Edward Kelly <morph_2016@yahoo.co.uk>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -22,53 +23,52 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #include "m_pd.h"
 
-t_class *cup_class;
+t_class *positive_class;
 
-typedef struct _cup
+typedef struct _positive
 {
   t_object x_obj;
-  t_int f_count, fa;
-  t_outlet *count;
-} t_cup;
+  t_float value;
+  t_outlet *positive;
+} t_positive;
 
-void cup_float(t_cup *y, t_floatarg f)
+void positive_float(t_positive *y, t_floatarg f)
 {
-  y->f_count = f;
+	y->value = f;
+	if(y->value < 0)
+	{
+		int i = (int)y->value;
+		i = i * -1 + 1;
+		y->value += (float)i;
+	}
+	outlet_float(y->positive, y->value);
 }
 
-void cup_bang(t_cup *y)
+void positive_bang(t_positive *y)
 {
-  outlet_float(y->count, y->f_count);
-  y->f_count += 1;
+    outlet_float(y->positive, y->value);
 }
 
-void cup_setbang(t_cup *y, t_floatarg f)
+void *positive_new(t_floatarg f)
 {
-  y->f_count = f;
-  outlet_float(y->count, y->f_count);
-  y->f_count += 1;
-}
-
-void *cup_new(t_floatarg f)
-{
-  t_cup *y = (t_cup *)pd_new(cup_class);
-  y->fa = f;
-  y->f_count = 0;
-  y->count = outlet_new(&y->x_obj, gensym("float"));
+  t_positive *y = (t_positive *)pd_new(positive_class);
+  y->value = f;
+  y->positive = outlet_new(&y->x_obj, gensym("float"));
   return(void *)y;
 }
 
-void cup_setup(void) 
+void positive_setup(void) 
 {
-  cup_class = class_new(gensym("cup"),
-  (t_newmethod)cup_new,
-  0, sizeof(t_cup),
-  0, A_DEFFLOAT, 0);
-  post("cup counts up ^_^");
+  positive_class = class_new(gensym("positive"),
+  (t_newmethod)positive_new,
+  0, sizeof(t_positive),
+			       0, A_DEFFLOAT, 0);
+  post("positive always returns a positive value");
+  post("negative values are shifted up");
 
-  class_addbang(cup_class, cup_bang);
-  class_addfloat(cup_class, cup_float);
-  class_addmethod(cup_class, (t_method)cup_setbang, gensym("setbang"), A_DEFFLOAT, 0);}
+  class_addbang(positive_class, positive_bang);
+  class_addfloat(positive_class, positive_float);
+}
