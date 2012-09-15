@@ -5,7 +5,7 @@ LIBRARY_NAME = ekext
 
 # add your .c source files, one object per file, to the SOURCES
 # variable, help files will be included automatically
-SOURCES = bmt~.c cup.c cupd.c doubledelta.c framescore~.c framespect~.c hasc~.c hssc~.c ihisto.c listmoses.c list_sum.c lpc~.c lpreson~.c maskxor.c mvcf~.c peakit~.c polymap.c polystat.c sieve.c simile~.c simile.c steady.c valve.c voicing_detector~.c weightonset.c zeroxpos~.c
+SOURCES = bmt~.c cup.c cupd.c doubledelta.c floatcount.c framescore~.c framespect~.c hasc~.c hssc~.c ihisto.c listmoses.c list_sum.c lpc~.c lpreson~.c maskxor.c mvcf~.c ninjacount.c peakit~.c polymap.c polystat.c positive.c sieve.c simile~.c simile.c steady.c valve.c voicing_detector~.c weightonset.c wavefolder~.c wavestretcher~.c zeroxpos~.c
 
 # list all pd objects (i.e. myobject.pd) files here, and their helpfiles will
 # be included automatically
@@ -101,12 +101,9 @@ ifeq ($(UNAME),Darwin)
     PD_PATH = /Applications/Pd-extended.app/Contents/Resources
     OPT_CFLAGS = -ftree-vectorize -ftree-vectorizer-verbose=2 -fast
 # build universal 32-bit on 10.4 and 32/64 on newer
-    ifeq ($(shell uname -r | sed 's|\([0-9][0-9]*\)\.[0-9][0-9]*\.[0-9][0-9]*|\1|'), 8)
-      FAT_FLAGS = -arch ppc -arch i386 -mmacosx-version-min=10.4
-    else
-      FAT_FLAGS = -arch ppc -arch i386 -arch x86_64 -mmacosx-version-min=10.4
-      SOURCES += $(SOURCES_iphoneos)
-    endif
+    FAT_FLAGS = -arch i386 -mmacosx-version-min=10.4
+#    FAT_FLAGS = -arch i386 -arch x86_64 -mmacosx-version-min=10.4
+    SOURCES += $(SOURCES_iphoneos)
     ALL_CFLAGS += $(FAT_FLAGS) -fPIC -I/sw/include
     # if the 'pd' binary exists, check the linking against it to aid with stripping
     BUNDLE_LOADER = $(shell test ! -e $(PD_PATH)/bin/pd || echo -bundle_loader $(PD_PATH)/bin/pd)
