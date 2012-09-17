@@ -112,7 +112,7 @@ void wavefolder_tilde_setup(void) {
   0, sizeof(t_wavefolder_tilde),
   CLASS_DEFAULT, A_DEFFLOAT, 0);
 
-  post("~~~~~~~~~~~~~~~>wavefolder~");
+  post("|^|^|^|^|>wavefolder~");
   post("~~~>by Ed Kelly, 2012");
 
   class_addmethod(wavefolder_tilde_class,

@@ -110,8 +110,8 @@ void wavestretcher_tilde_setup(void) {
   0, sizeof(t_wavestretcher_tilde),
   CLASS_DEFAULT, A_DEFFLOAT, 0);
 
-  post("~~~~~~~~~~~~~~~>wavestretcher~");
-  post("~~~>by Ed Kelly, 2012");
+  post("^v^v^v^>wavestretcher~");
+  post("---->by Ed Kelly, 2012");
 
   class_addmethod(wavestretcher_tilde_class,
   (t_method)wavestretcher_tilde_dsp, gensym("dsp"), 0);
